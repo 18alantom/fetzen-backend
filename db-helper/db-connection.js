@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
-const { queryUserCredentialInsert, queryUserDataInsert, queryUserWeightInsert } = require("./queries/query-insert");
+const { queryUserCredentialInsert, queryUserDataInsert, queryUserWeightInsert, queryGoalInsert } = require("./queries/query-insert");
 const { insertIntoTable, checkUserPresence } = require("./helper-functions");
 
 const saltRounds = 4;
@@ -40,7 +40,19 @@ function registerUser(connection, data, userPresent, successfulRegistration) {
   });
 }
 
+// Inserts a goal into the goal table
+function insertGoal(connection, goal, successfulInsertion) {
+  insertIntoTable(connection, queryGoalInsert, goal, successfulInsertion);
+}
+
+// Insert a weight value into the user_weight table
+function insertWeight(connection, weight, successfulInsertion) {
+  insertIntoTable(connection, queryUserWeightInsert, weight, successfulInsertion);
+}
+
 module.exports = {
   getConnection,
-  registerUser
+  registerUser,
+  insertGoal,
+  insertWeight
 };

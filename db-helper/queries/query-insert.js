@@ -22,7 +22,7 @@ const queryUserWeightInsert = ({ u_id, u_date_created, u_weight }) => {
 const queryGoalInsert = ({ g_id, u_id, g_title, g_detail, g_deadline }) => {
   return `
     insert into goal (g_id, u_id, g_title, g_detail, g_deadline)
-    values ('${g_id}', '${u_id}', '${g_title}', '${g_detail}', ${g_deadline})
+    values ('${g_id}', '${u_id}', '${g_title}', '${g_detail}', '${g_deadline}')
   `;
 };
 

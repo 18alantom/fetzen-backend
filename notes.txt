@@ -1,11 +1,24 @@
-on registering a user the json that the api receives is:
-{
+CREATION JSON
+user: {
   u_uname: "",
   u_upassw: "",
   u_id: "",
   u_first_name: "",
   u_last_name: "",
   u_height: 0.0,
-  u_date_created: 
+  u_date_created: 'yyyy-mm-ddThh:mm:ss'
   u_weight: 0.0
 }
+
+weight: {
+  
+}
+
+goal: {
+  g_id: "",
+  u_id: "",
+  g_title: "",
+  g_detail: "",
+  g_deadline: "yyyy-mm-dd"
+}
+
