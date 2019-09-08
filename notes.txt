@@ -1,0 +1,11 @@
+on registering a user the json that the api receives is:
+{
+  u_uname: "",
+  u_upassw: "",
+  u_id: "",
+  u_first_name: "",
+  u_last_name: "",
+  u_height: 0.0,
+  u_date_created: datetime
+  u_weight: 0.0
+}

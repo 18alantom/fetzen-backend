@@ -66,9 +66,10 @@ create table workout (
 -- A snap is stored when a workout is done
 create table workout_snap (
   w_id varchar(40),
-  w_date date default '1000-01-01',
+  w_date date,
   w_note varchar(2000),
-  primary key(w_id, w_date),
+  w_is_creation tinyint default 0,
+  primary key(w_id, w_date, w_is_creation),
   foreign key (w_id) references workout(w_id)
     on delete cascade
     on update cascade
@@ -94,11 +95,12 @@ create table exercise_snap (
   w_id varchar(40),
   w_date date,
   e_note varchar(2000),
+  w_is_creation tinyint default 0,
   primary key (e_id, w_date),
   foreign key (e_id) references exercise(e_id)
     on delete cascade
     on update cascade,
-  foreign key (w_id,w_date) references workout_snap(w_id,w_date)
+  foreign key (w_id,w_date,w_is_creation) references workout_snap(w_id,w_date,w_is_creation)
     on delete cascade
     on update cascade
 );
@@ -108,15 +110,16 @@ create table cycle_snap (
   c_id varchar(40),
   e_id varchar(40),
   w_id varchar(40),
-  w_date date default '1000-01-01',
+  w_date date,
   c_intensity dec(6,2) not null default 0.0,
   c_reps smallint unsigned not null default 0,
   c_rest smallint unsigned not null default 0,
+  w_is_creation tinyint default 0,
   primary key(c_id, w_date),
   foreign key (e_id) references exercise(e_id)
     on delete cascade
     on update cascade,
-  foreign key (w_id,w_date) references workout_snap(w_id,w_date)
+  foreign key (w_id,w_date,w_is_creation) references workout_snap(w_id,w_date,w_is_creation)
     on delete cascade
     on update cascade
 );
