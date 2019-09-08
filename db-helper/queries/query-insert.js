@@ -12,10 +12,10 @@ const queryUserDataInsert = ({ u_id, u_uname, u_first_name, u_last_name, u_date_
   `;
 };
 
-const queryUserWeightInsert = ({ u_id, u_measure_date, u_weight }) => {
+const queryUserWeightInsert = ({ u_id, u_date_created, u_weight }) => {
   return `
     insert into user_weight
-    values ('${u_id}', '${u_measure_date}', ${u_weight})
+    values ('${u_id}', '${u_date_created}', ${u_weight})
   `;
 };
 

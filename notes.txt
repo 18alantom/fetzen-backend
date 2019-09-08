@@ -6,6 +6,6 @@ on registering a user the json that the api receives is:
   u_first_name: "",
   u_last_name: "",
   u_height: 0.0,
-  u_date_created: datetime
+  u_date_created: 
   u_weight: 0.0
 }

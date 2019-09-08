@@ -42,7 +42,7 @@ function insertIntoTable(connection, queryGetter, dataToInsert, resultHandler) {
 
 function checkUserPresence(connection, username, presentCallback, notPresentCallback) {
   const undefMessage = "check user presence: undefined";
-  connection(getUser(username), queryCallbackSelect(presentCallback, notPresentCallback, defaultNoResultHandler(undefMessage)));
+  connection.query(getUser(username), queryCallbackSelect(presentCallback, notPresentCallback, defaultNoResultHandler(undefMessage)));
 }
 
 module.exports = {

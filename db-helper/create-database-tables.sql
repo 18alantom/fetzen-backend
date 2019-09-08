@@ -16,6 +16,7 @@ create table user_data (
   u_uname varchar(60),
   u_first_name varchar(30) not null,
   u_last_name varchar(30),
+  u_date_created datetime not null, 
   -- Height will be stored as cm
   u_height dec(7,3) not null,
   primary key (u_id),
@@ -27,7 +28,7 @@ create table user_data (
 -- Table that tracks user's weight
 create table user_weight (
   u_id varchar(40),
-  u_measure_date datetime default current_timestamp, 
+  u_date_created datetime not null, 
   -- Weight will be stored as kg
   u_weight dec(6,3) not null, 
   foreign key (u_id) references user_data(u_id)
