@@ -21,7 +21,7 @@ function insertUserCredentials(connection, { u_uname, u_passw }, userPresent, su
       userPresent();
     },
     () => {
-      bcrypt.hash(u_passw, saltRounds, (error, hash) => {
+      bcrypt.hash(u_passw, saltRounds=4, (error, hash) => {
         if (error) {
           console.error(error);
         } else {
@@ -137,7 +137,6 @@ function insertExercise(connection, exercise, successfulInsertion) {
 }
 
 module.exports = {
-  getConnection,
   registerUser,
   insertGoal,
   insertWeight,

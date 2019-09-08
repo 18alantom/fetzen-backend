@@ -9,6 +9,7 @@ yarn-error.log*
 !public
 
 # Don't track these either
+db-testers/
 db-tester.js
 notes.txt
 todo.txt

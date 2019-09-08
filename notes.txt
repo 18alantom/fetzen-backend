@@ -1,24 +1,92 @@
 CREATION JSON
+  user: {
+    u_uname: "",
+    u_upassw: "",
+    u_id: "",
+    u_first_name: "",
+    u_last_name: "",
+    u_height: 0.0,
+    u_date_created: 'yyyy-mm-ddThh:mm:ss'
+    u_weight: 0.0
+  }
+
+  weight: {
+    u_id: "",
+    u_date_created: 'yyyy-mm-ddThh:mm:ss',
+    u_weight: 0.0
+  }
+
+  goal: {
+    g_id: "",
+    u_id: "",
+    g_title: "",
+    g_detail: "",
+    g_deadline: "yyyy-mm-dd"
+  }
+
+  // To this w_is_creation and w_date have to be added by the server.
+  workout: {
+    w_id: "",
+    u_id: "",
+    w_name: "",
+    w_days: "",
+    w_note: "",
+    w_exercises: [
+      {
+        e_id: "",
+        e_name: "",
+        e_unit: "",
+        e_note: "",
+        e_cycles: [
+          {
+            c_id: "",
+            c_intensity: 0.0,
+            c_reps: 0,
+            c_rest: 0
+          }
+        ]
+      },
+      {
+      },
+      { 
+      }
+    ]
+  }
+
+  // w_is_creation and w_date needs to be added to this.
+  exercise: {
+    w_id: "",
+    w_date: "", (may or may not be there check if it is there first)
+    e_id: "",
+    e_name: "",
+    e_unit: "",
+    e_note: "",
+    e_cycles: [
+      {
+        c_id: "",
+        c_intensity: 0.0,
+        c_reps: 0,
+        c_rest: 0
+      }
+    ]
+  }
+
+DELETION JSON
 user: {
   u_uname: "",
-  u_upassw: "",
-  u_id: "",
-  u_first_name: "",
-  u_last_name: "",
-  u_height: 0.0,
-  u_date_created: 'yyyy-mm-ddThh:mm:ss'
-  u_weight: 0.0
-}
-
-weight: {
-  
+  u_passw: binary
 }
 
 goal: {
-  g_id: "",
-  u_id: "",
-  g_title: "",
-  g_detail: "",
-  g_deadline: "yyyy-mm-dd"
+  g_id
 }
+
+workout: {
+  w_id
+}
+
+exercise: {
+  e_id
+}
+
 
