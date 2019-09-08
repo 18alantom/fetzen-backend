@@ -41,41 +41,23 @@ const queryExerciseInsert = ({ e_id, w_id, e_name, e_unit }) => {
 };
 
 const queryWorkoutSnapInsert = ({ w_id, w_date, w_note, w_is_creation }) => {
-  let insertDate;
-  let whichVal;
-  if (!w_date) {
-    insertDate = "";
-    whichVal = `(w_id, w_note, w_is_creation)`;
-  } else {
-    insertDate = `'${w_date}', `;
-    whichVal = "";
-  }
   return `
-    insert into workout_snap ${whichVal}
-    values ('${w_id}', ${insertDate} '${w_note}', '${w_is_creation}')
+    insert into workout_snap
+    values ('${w_id}', '${w_date}', '${w_note}', ${w_is_creation})
   `;
 };
 
 const queryExerciseSnapInsert = ({ e_id, w_id, w_date, e_note, w_is_creation }) => {
   return `
-    insert into exercise
-    values ('${e_id}', '${w_id}', '${w_date}', '${e_note}, '${w_is_creation}')
+    insert into exercise_snap
+    values ('${e_id}', '${w_id}', '${w_date}', '${e_note}', ${w_is_creation})
   `;
 };
 
 const queryCycleSnapInsert = ({ c_id, e_id, w_id, w_date, c_intensity, c_reps, c_rest, w_is_creation }) => {
-  let insertDate;
-  let whichVal;
-  if (!w_date) {
-    insertDate = "";
-    whichVal = `(c_id, e_id, w_id, c_intensity, c_reps, c_rest, w_is_creation)`;
-  } else {
-    insertDate = `'${w_date}', `;
-    whichVal = "";
-  }
   return `
-    insert into cycle_snap ${whichVal}
-    values ('${c_id}', '${e_id}', '${w_id}', ${insertDate} '${c_intensity}', '${c_reps}', '${c_rest}', '${w_is_creation}')
+    insert into cycle_snap
+    values ('${c_id}', '${e_id}', '${w_id}', '${w_date}', '${c_intensity}', '${c_reps}', '${c_rest}', ${w_is_creation})
   `;
 };
 
