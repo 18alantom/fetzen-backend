@@ -74,7 +74,7 @@ CREATION JSON
 DELETION JSON
 user: {
   u_uname: "",
-  u_passw: binary
+  u_passw: ""
 }
 
 goal: {
