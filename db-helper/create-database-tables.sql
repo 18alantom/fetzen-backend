@@ -17,7 +17,7 @@ create table user_data (
   u_first_name varchar(30) not null,
   u_last_name varchar(30),
   -- Height will be stored as cm
-  u_height dec(6,3) not null,
+  u_height dec(7,3) not null,
   primary key (u_id),
   foreign key (u_uname) references user_credential(u_uname)
     on delete cascade
