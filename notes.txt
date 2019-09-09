@@ -89,4 +89,10 @@ exercise: {
   e_id
 }
 
+UPDATION JSON
 
+goal: {
+  g_id:"",
+  g_complete: 0,
+  g_date_completed: "yyyy-mm-dd"
+}

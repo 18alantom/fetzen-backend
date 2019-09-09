@@ -58,9 +58,16 @@ function deleteFromTable(connection, queryGetter, deletionData, resultHandler) {
   connection.query(queryGetter(deletionData), queryCallbackNonSelect(resultHandler, defaultNoResultHandler(noResultMessage)));
 }
 
+// General function to update table values
+function updateTable(connection, queryGetter, updationData, resultHandler) {
+  const noResultMessage = `no result\nupdation: ${JSON.stringify(updationData)}`;
+  connection.query(queryGetter(updationData), queryCallbackNonSelect(resultHandler, defaultNoResultHandler(noResultMessage)));
+}
+
 module.exports = {
   insertIntoTable,
   checkUserPresence,
   checkWorkoutSnapPresence,
-  deleteFromTable
+  deleteFromTable,
+  updateTable
 };
