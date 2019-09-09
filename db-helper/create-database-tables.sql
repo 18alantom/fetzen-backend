@@ -43,7 +43,7 @@ create table goal (
   g_title varchar(300) not null,
   g_detail varchar(2000) not null,
   g_deadline date not null,
-  g_complete tinyint default 0,
+  g_complete tinyint unsigned default 0,
   g_date_completed date,
   primary key (g_id),
   foreign key (u_id) references user_data(u_id)
@@ -69,7 +69,7 @@ create table workout_snap (
   w_id varchar(40),
   w_date date,
   w_note varchar(2000),
-  w_is_creation tinyint default 0,
+  w_is_creation tinyint unsigned default 0,
   primary key(w_id, w_date, w_is_creation),
   foreign key (w_id) references workout(w_id)
     on delete cascade
@@ -81,7 +81,6 @@ create table exercise (
   e_id varchar(40),
   w_id varchar(40),
   e_name varchar(200) not null,
-  e_unit enum('kg','lb','kmpg','mph') not null default 'kg',
   primary key (e_id),
   foreign key (w_id) references workout(w_id)
     on delete cascade
@@ -96,8 +95,9 @@ create table exercise_snap (
   w_id varchar(40),
   w_date date,
   e_note varchar(2000),
-  w_is_creation tinyint default 0,
-  primary key (e_id, w_date),
+  e_unit enum('kg','lb','kmpg','mph') not null default 'kg',
+  w_is_creation tinyint unsigned default 0,
+  primary key (e_id, w_date, w_is_creation),
   foreign key (e_id) references exercise(e_id)
     on delete cascade
     on update cascade,
@@ -112,11 +112,12 @@ create table cycle_snap (
   e_id varchar(40),
   w_id varchar(40),
   w_date date,
+  c_seq tinyint unsigned default 0,
   c_intensity dec(6,2) not null default 0.0,
   c_reps smallint unsigned not null default 0,
   c_rest smallint unsigned not null default 0,
-  w_is_creation tinyint default 0,
-  primary key(c_id, w_date),
+  w_is_creation tinyint unsigned default 0,
+  primary key(c_id, w_date, w_is_creation),
   foreign key (e_id) references exercise(e_id)
     on delete cascade
     on update cascade,

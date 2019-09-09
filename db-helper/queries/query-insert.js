@@ -33,10 +33,10 @@ const queryWorkoutInsert = ({ w_id, u_id, w_name, w_days }) => {
   `;
 };
 
-const queryExerciseInsert = ({ e_id, w_id, e_name, e_unit }) => {
+const queryExerciseInsert = ({ e_id, w_id, e_name }) => {
   return `
     insert into exercise
-    values ('${e_id}', '${w_id}', '${e_name}', '${e_unit}')
+    values ('${e_id}', '${w_id}', '${e_name}')
   `;
 };
 
@@ -47,17 +47,17 @@ const queryWorkoutSnapInsert = ({ w_id, w_date, w_note, w_is_creation }) => {
   `;
 };
 
-const queryExerciseSnapInsert = ({ e_id, w_id, w_date, e_note, w_is_creation }) => {
+const queryExerciseSnapInsert = ({ e_id, w_id, w_date, e_note, e_unit, w_is_creation }) => {
   return `
     insert into exercise_snap
-    values ('${e_id}', '${w_id}', '${w_date}', '${e_note}', ${w_is_creation})
+    values ('${e_id}', '${w_id}', '${w_date}', '${e_note}', '${e_unit}', ${w_is_creation})
   `;
 };
 
-const queryCycleSnapInsert = ({ c_id, e_id, w_id, w_date, c_intensity, c_reps, c_rest, w_is_creation }) => {
+const queryCycleSnapInsert = ({ c_id, e_id, w_id, w_date, c_seq, c_intensity, c_reps, c_rest, w_is_creation }) => {
   return `
     insert into cycle_snap
-    values ('${c_id}', '${e_id}', '${w_id}', '${w_date}', '${c_intensity}', '${c_reps}', '${c_rest}', ${w_is_creation})
+    values ('${c_id}', '${e_id}', '${w_id}', '${w_date}', ${c_seq}, '${c_intensity}', '${c_reps}', '${c_rest}', ${w_is_creation})
   `;
 };
 

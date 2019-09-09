@@ -96,3 +96,52 @@ goal: {
   g_complete: 0,
   g_date_completed: "yyyy-mm-dd"
 }
+
+exercise update cases:
+1 When only the name of an exercise is updated.
+2 When the name of an exercise is updated along with other things.
+3 When only other things are updated.
+(other things: cycles(added, removed), note changed)
+all above cases should be combined into one and an entire
+exercise object will be send with which a new creation snap will be made
+for the specific date.
+
+exercise: {
+  w_id: "",
+  e_id: "",
+  e_unit: ""
+  e_name: ""
+  e_note: "",
+  e_cycles: [
+    {
+      c_id: "",
+      c_intensity: 0.0,
+      c_reps: 0,
+      c_rest: 0
+    },
+    {}
+  ]
+}
+
+on workout done for the exercises it should check if any exercise 
+has the same date of creation and change them to non creation exercises
+
+case 1: update value in the exercise table according to e_id
+
+case 2: update value in the exercise table according to e_id
+        create creation workout_snap for the date
+        create creation exercise_snap for the date
+        create creation cycle_snaps for the date 
+        
+case 3: create creation workout_snap for the date
+        create creation exercise_snap for the date
+        create creation cycle_snaps for the date 
+
+
+
+
+workout updated cases: 
+- When only name, days updated
+- When name, days, and other things also updated 
+  such as exercise added, removed, note added
+- When only other things are updated

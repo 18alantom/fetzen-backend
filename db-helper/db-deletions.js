@@ -19,7 +19,8 @@ function deleteUser(connection, user, successfulDeletion, invalidPassword) {
       });
     },
     () => {
-      console.log(`something went wrong in the deletion of ${user.u_uname}`);
+      console.log(`user ${user.u_uname} is not present`);
+
     }
   );
 }

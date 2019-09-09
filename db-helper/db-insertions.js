@@ -21,7 +21,7 @@ function insertUserCredentials(connection, { u_uname, u_passw }, userPresent, su
       userPresent();
     },
     () => {
-      bcrypt.hash(u_passw, saltRounds=4, (error, hash) => {
+      bcrypt.hash(u_passw, (saltRounds = 4), (error, hash) => {
         if (error) {
           console.error(error);
         } else {
@@ -63,6 +63,7 @@ function insertExerciseHelper(connection, exercise, successfulInsertion) {
         cycle.w_id = exercise.w_id;
         cycle.w_date = exercise.w_date;
         cycle.w_is_creation = exercise.w_is_creation;
+        cycle.c_seq = parseInt(i)
         insertIntoTable(connection, queryCycleSnapInsert, cycle, () => {
           if (parseInt(i) === numberOfCycles - 1) {
             successfulInsertion();
@@ -79,7 +80,7 @@ function insertWorkout(connection, workout, successfulInsertion) {
     workout.w_date = new Date().toISOString().split("T")[0];
   }
   if (!workout.w_is_creation) {
-    workout.w_is_creation = 0;
+    workout.w_is_creation = 1;
   }
   insertIntoTable(connection, queryWorkoutInsert, workout, () => {
     insertIntoTable(connection, queryWorkoutSnapInsert, workout, () => {
@@ -99,6 +100,7 @@ function insertWorkout(connection, workout, successfulInsertion) {
               cycle.w_id = exercise.w_id;
               cycle.w_date = exercise.w_date;
               cycle.w_is_creation = exercise.w_is_creation;
+              cycle.c_seq = parseInt(j);
 
               insertIntoTable(connection, queryCycleSnapInsert, cycle, () => {
                 if (parseInt(i) === numberOfExercises - 1 && parseInt(j) === numberOfCycles - 1) {
@@ -119,7 +121,7 @@ function insertExercise(connection, exercise, successfulInsertion) {
     exercise.w_date = new Date().toISOString().split("T")[0];
   }
   if (!exercise.w_is_creation) {
-    exercise.w_is_creation = 0;
+    exercise.w_is_creation = 1;
   }
   checkWorkoutSnapPresence(
     connection,
