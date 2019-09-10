@@ -145,3 +145,31 @@ workout updated cases:
 - When name, days, and other things also updated 
   such as exercise added, removed, note added
 - When only other things are updated
+- all combined into one for simplicity
+
+  workout: {
+    w_id: "",
+    w_name: "",
+    w_days: "",
+    w_note: "",
+    w_exercises: [
+      {
+        e_id: "",
+        e_name: "",
+        e_unit: "",
+        e_note: "",
+        e_cycles: [
+          {
+            c_id: "",
+            c_intensity: 0.0,
+            c_reps: 0,
+            c_rest: 0
+          }
+        ]
+      },
+      {
+      },
+      { 
+      }
+    ]
+  }

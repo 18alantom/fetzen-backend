@@ -30,9 +30,18 @@ const getCycleSnap = (e_id, w_date, w_is_creation) => {
   `;
 };
 
+const getExercise = e_id => {
+  return `
+    select e_id
+    from exercise
+    where e_id='${e_id}'
+  `;
+};
+
 module.exports = {
   getUser,
   getWorkoutSnap,
   getExerciseSnap,
-  getCycleSnap
+  getCycleSnap,
+  getExercise
 };

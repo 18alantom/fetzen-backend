@@ -63,7 +63,7 @@ function insertExerciseHelper(connection, exercise, successfulInsertion) {
         cycle.w_id = exercise.w_id;
         cycle.w_date = exercise.w_date;
         cycle.w_is_creation = exercise.w_is_creation;
-        cycle.c_seq = parseInt(i)
+        cycle.c_seq = parseInt(i);
         insertIntoTable(connection, queryCycleSnapInsert, cycle, () => {
           if (parseInt(i) === numberOfCycles - 1) {
             successfulInsertion();
@@ -116,26 +116,31 @@ function insertWorkout(connection, workout, successfulInsertion) {
 }
 
 // Inserts exercise into db checks if a previous snap is present first.
-function insertExercise(connection, exercise, successfulInsertion) {
+// here checkPresence false indicates that the workoutSnap is present and doesn't need to be created.
+function insertExercise(connection, exercise, successfulInsertion, checkPresence = true) {
   if (!exercise.w_date) {
     exercise.w_date = new Date().toISOString().split("T")[0];
   }
   if (!exercise.w_is_creation) {
     exercise.w_is_creation = 1;
   }
-  checkWorkoutSnapPresence(
-    connection,
-    exercise,
-    _result => {
-      insertExerciseHelper(connection, exercise, successfulInsertion);
-    },
-    () => {
-      exercise.w_note = "";
-      insertIntoTable(connection, queryWorkoutSnapInsert, exercise, () => {
+  if (checkPresence) {
+    checkWorkoutSnapPresence(
+      connection,
+      exercise,
+      _result => {
         insertExerciseHelper(connection, exercise, successfulInsertion);
-      });
-    }
-  );
+      },
+      () => {
+        exercise.w_note = "";
+        insertIntoTable(connection, queryWorkoutSnapInsert, exercise, () => {
+          insertExerciseHelper(connection, exercise, successfulInsertion);
+        });
+      }
+    );
+  } else {
+    insertExerciseHelper(connection, exercise, successfulInsertion);
+  }
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap } = require("./queries/query-other");
+const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap, getExercise } = require("./queries/query-other");
 
 function defaultNoResultHandler(from) {
   return () => {
@@ -54,6 +54,12 @@ function checkExerciseSnapPresence(connection, { e_id, w_date, w_is_creation }, 
   );
 }
 
+// Checks if the exercise of a given id is present then calls the appropriate functions
+function checkExercisePresence(connection, { e_id }, presentCallback, notPresentCallback) {
+  const undefMessage = "check exercise presence: undefined";
+  connection.query(getExercise(e_id), queryCallbackSelect(presentCallback, notPresentCallback, defaultNoResultHandler(undefMessage)));
+}
+
 // Checks if the exercise  snap of a given id and date are present then calls the appropriate functions
 function checkCycleSnapPresence(connection, { c_id, w_date, w_is_creation }, presentCallback, notPresentCallback) {
   const undefMessage = "check cycle snap presence: undefined";
@@ -83,6 +89,7 @@ module.exports = {
   checkUserPresence,
   checkWorkoutSnapPresence,
   checkExerciseSnapPresence,
+  checkExercisePresence,
   checkCycleSnapPresence,
   deleteFromTable,
   updateTable
