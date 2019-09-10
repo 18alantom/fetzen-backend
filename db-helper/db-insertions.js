@@ -74,6 +74,34 @@ function insertExerciseHelper(connection, exercise, successfulInsertion) {
   });
 }
 
+// Inserts exercise into db checks if a previous snap is present first.
+// here checkPresence false indicates that the workoutSnap is present and doesn't need to be created.
+function insertExercise(connection, exercise, successfulInsertion, checkPresence = true) {
+  if (!exercise.w_date) {
+    exercise.w_date = new Date().toISOString().split("T")[0];
+  }
+  if (!exercise.w_is_creation) {
+    exercise.w_is_creation = 1;
+  }
+  if (checkPresence) {
+    checkWorkoutSnapPresence(
+      connection,
+      exercise,
+      _result => {
+        insertExerciseHelper(connection, exercise, successfulInsertion);
+      },
+      () => {
+        exercise.w_note = "";
+        insertIntoTable(connection, queryWorkoutSnapInsert, exercise, () => {
+          insertExerciseHelper(connection, exercise, successfulInsertion);
+        });
+      }
+    );
+  } else {
+    insertExerciseHelper(connection, exercise, successfulInsertion);
+  }
+}
+
 // Inserts a workout into the table along with its exercises and their cycles
 function insertWorkout(connection, workout, successfulInsertion) {
   if (!workout.w_date) {
@@ -113,34 +141,6 @@ function insertWorkout(connection, workout, successfulInsertion) {
       }
     });
   });
-}
-
-// Inserts exercise into db checks if a previous snap is present first.
-// here checkPresence false indicates that the workoutSnap is present and doesn't need to be created.
-function insertExercise(connection, exercise, successfulInsertion, checkPresence = true) {
-  if (!exercise.w_date) {
-    exercise.w_date = new Date().toISOString().split("T")[0];
-  }
-  if (!exercise.w_is_creation) {
-    exercise.w_is_creation = 1;
-  }
-  if (checkPresence) {
-    checkWorkoutSnapPresence(
-      connection,
-      exercise,
-      _result => {
-        insertExerciseHelper(connection, exercise, successfulInsertion);
-      },
-      () => {
-        exercise.w_note = "";
-        insertIntoTable(connection, queryWorkoutSnapInsert, exercise, () => {
-          insertExerciseHelper(connection, exercise, successfulInsertion);
-        });
-      }
-    );
-  } else {
-    insertExerciseHelper(connection, exercise, successfulInsertion);
-  }
 }
 
 module.exports = {

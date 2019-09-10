@@ -16,6 +16,7 @@ const {
 } = require("./queries/query-update");
 const { queryWorkoutSnapInsert, queryExerciseInsert, queryExerciseSnapInsert, queryCycleSnapInsert } = require("./queries/query-insert");
 const { insertExercise } = require("./db-insertions");
+const { deleteExercise } = require("./db-deletions");
 
 function updateGoal(connection, goal, successfulUpdation) {
   updateTable(connection, queryGoalUpdate, goal, successfulUpdation);
@@ -122,34 +123,47 @@ function updateExercise(connection, exercise, successfulUpdation, lastExercise, 
 }
 
 function updateExercises(connection, workout, successfulUpdation, checkPresence = true) {
-  let l = workout.w_exercises.length;
-  let last = false;
+  const l = workout.w_exercises.length;
   for (let c in workout.w_exercises) {
     const exercise = workout.w_exercises[c];
-    exercise.w_id = exercise.w_id;
-    exercise.w_date = exercise.w_date;
-    exercise.w_is_creation = exercise.w_is_creation;
-    if (parseInt(c) === l - 1) {
-      lastExercise = true;
-    }
+    exercise.w_id = workout.w_id;
+    exercise.w_date = workout.w_date;
+    exercise.w_is_creation = workout.w_is_creation;
     checkExercisePresence(
       connection,
       exercise,
+      // Last exercise is not stroed in a variable and passed cause
+      // the final value was being sent maybe because the queries are asynchronous.
       () => {
-        updateExercise(connection, cycle, successfulUpdation, lastExercise, checkPresence);
+        updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true);
       },
       () => {
-        insertExercise(
-          connection,
-          exercise,
-          () => {
-            exercise.w_is_creation = 0;
-            updateExercise(connection, cycle, successfulUpdation, lastExercise, checkPresence);
-          },
-          false
-        );
+        insertExercise(connection, exercise, () => {
+          exercise.w_is_creation = 0;
+          updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true);
+        });
       }
     );
+  }
+}
+
+function deleteExercises(connection, workout, successfulDeletion) {
+  if (workout.w_exercises_deleted) {
+    let l = workout.w_exercises_deleted.length;
+    if (l === 0) {
+      successfulDeletion();
+    } else {
+      for (let e in workout.w_exercises_deleted) {
+        const e_id = workout.w_exercises_deleted[e];
+        deleteExercise(connection, { e_id }, () => {
+          if (parseInt(e) === l - 1) {
+            successfulDeletion();
+          }
+        });
+      }
+    }
+  } else {
+    successfulDeletion();
   }
 }
 
@@ -161,18 +175,20 @@ function updateWorkout(connection, workout, successfulUpdation) {
     workout.w_is_creation = 0;
   }
   updateTable(connection, queryWorkoutUpdate, workout, () => {
-    checkWorkoutSnapPresence(
-      connection,
-      workout,
-      _result => {
-        updateExercises(connection, workout, successfulUpdation, true);
-      },
-      () => {
-        insertIntoTable(connection, queryWorkoutSnapInsert, workout, () => {
-          updateExercises(connection, workout, successfulUpdation, false);
-        });
-      }
-    );
+    deleteExercises(connection, workout, () => {
+      checkWorkoutSnapPresence(
+        connection,
+        workout,
+        _result => {
+          updateExercises(connection, workout, successfulUpdation, true);
+        },
+        () => {
+          insertIntoTable(connection, queryWorkoutSnapInsert, workout, () => {
+            updateExercises(connection, workout, successfulUpdation, false);
+          });
+        }
+      );
+    });
   });
 }
 

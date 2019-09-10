@@ -171,5 +171,8 @@ workout updated cases:
       },
       { 
       }
+    ],
+    w_exercises_deleted: [
+      e_id: ""
     ]
   }
