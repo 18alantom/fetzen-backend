@@ -15,7 +15,22 @@ const queryGetUserWeightLatest = ({ u_id }) => {
   `;
 };
 
+const queryGetGoal = ({ u_id }) => {
+  return `
+    select g_id as "id", g_title as "title", g_detail as "detail",
+    g_deadline as "deadline", g_complete as "complete",
+    g_date_completed as "dateCompleted" from goal
+    where u_id="${u_id}"
+    order by g_complete asc, g_deadline asc
+  `;
+};
+
+const queryGetWorkout = ({ u_id }) => {
+  
+};
+
 module.exports = {
   queryGetUserData,
-  queryGetUserWeightLatest
+  queryGetUserWeightLatest,
+  queryGetGoal
 };
