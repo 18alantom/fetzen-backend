@@ -1,3 +1,5 @@
+const { noQuote: nq } = require("../helper-functions");
+
 const queryGoalUpdate = ({ g_id, g_complete, g_date_completed }) => {
   return `
     update goal
@@ -9,7 +11,7 @@ const queryGoalUpdate = ({ g_id, g_complete, g_date_completed }) => {
 const queryExerciseUpdate = ({ e_id, e_name }) => {
   return `
     update exercise
-    set e_name='${e_name}' 
+    set e_name='${nq(e_name)}' 
     where e_id='${e_id}'
   `;
 };
@@ -22,7 +24,7 @@ const queryExerciseSnapUpdate = ({ e_id, w_date, e_note, e_unit, w_is_creation }
     eunit_setter = `e_unit='${e_unit}'`;
   }
   if (e_note) {
-    enote_setter = `e_note='${e_note}'`;
+    enote_setter = `e_note='${nq(e_note)}'`;
   }
   let a = eunit_setter.length > 0;
   let b = enote_setter.length > 0;
@@ -51,7 +53,7 @@ const queryCycleSnapUpdate = ({ c_id, c_seq, w_date, c_intensity, c_reps, c_rest
 const queryWorkoutUpdate = ({ w_id, w_name, w_days }) => {
   return `
     update workout
-    set w_name='${w_name}', w_days='${w_days}'
+    set w_name='${nq(w_name)}', w_days='${w_days}'
     where w_id='${w_id}'
   `;
 };
@@ -59,7 +61,7 @@ const queryWorkoutUpdate = ({ w_id, w_name, w_days }) => {
 const queryWorkoutSnapUpdate = ({ w_id, w_date, w_note, w_is_creation }) => {
   return `
     update workout_snap
-    set w_note='${w_note}' 
+    set w_note='${nq(w_note)}' 
     where w_id='${w_id}' and w_date='${w_date}' and w_is_creation=${w_is_creation}
   `;
 };

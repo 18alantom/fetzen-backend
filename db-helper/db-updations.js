@@ -3,6 +3,7 @@ const {
   checkExerciseSnapPresence,
   checkExercisePresence,
   checkCycleSnapPresence,
+  checkDoneDatePresence,
   insertIntoTable,
   updateTable
 } = require("./helper-functions");
@@ -14,7 +15,8 @@ const {
   queryWorkoutUpdate,
   queryWorkoutSnapUpdate
 } = require("./queries/query-update");
-const { queryWorkoutSnapInsert, queryExerciseInsert, queryExerciseSnapInsert, queryCycleSnapInsert } = require("./queries/query-insert");
+const { queryDoneDateInsert, queryWorkoutSnapInsert, queryExerciseSnapInsert, queryCycleSnapInsert } = require("./queries/query-insert");
+const { queryWorkoutDone } = require("./queries/query-done");
 const { insertExercise } = require("./db-insertions");
 const { deleteExercise } = require("./db-deletions");
 
@@ -89,14 +91,14 @@ function updateExerciseSnap(connection, exercise, successfulUpdation, lastExerci
   }
 }
 
-function updateExercise(connection, exercise, successfulUpdation, lastExercise, checkPresence, cascade = false) {
+function updateExercise(connection, exercise, successfulUpdation, lastExercise, checkPresence, cascade = false, onlySnap = false) {
   if (!exercise.w_date) {
     exercise.w_date = new Date().toISOString().split("T")[0];
   }
   if (!exercise.w_is_creation) {
     exercise.w_is_creation = 0;
   }
-  updateTable(connection, queryExerciseUpdate, exercise, () => {
+  const updateSnap = () => {
     if (!cascade) {
       checkWorkoutSnapPresence(
         connection,
@@ -119,31 +121,42 @@ function updateExercise(connection, exercise, successfulUpdation, lastExercise, 
     } else {
       updateExerciseSnap(connection, exercise, successfulUpdation, lastExercise, checkPresence);
     }
-  });
+  };
+  if (onlySnap) {
+    updateSnap();
+  } else {
+    updateTable(connection, queryExerciseUpdate, exercise, () => {
+      updateSnap();
+    });
+  }
 }
 
-function updateExercises(connection, workout, successfulUpdation, checkPresence = true) {
+function updateExercises(connection, workout, successfulUpdation, checkPresence = true, onlySnap = false, checkExercise = true) {
   const l = workout.w_exercises.length;
   for (let c in workout.w_exercises) {
     const exercise = workout.w_exercises[c];
     exercise.w_id = workout.w_id;
     exercise.w_date = workout.w_date;
     exercise.w_is_creation = workout.w_is_creation;
-    checkExercisePresence(
-      connection,
-      exercise,
-      // Last exercise is not stroed in a variable and passed cause
-      // the final value was being sent maybe because the queries are asynchronous.
-      () => {
-        updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true);
-      },
-      () => {
-        insertExercise(connection, exercise, () => {
-          exercise.w_is_creation = 0;
-          updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true);
-        });
-      }
-    );
+    if (checkExercise) {
+      checkExercisePresence(
+        connection,
+        exercise,
+        // Last exercise is not stroed in a variable and passed cause
+        // the final value was being sent maybe because the queries are asynchronous.
+        () => {
+          updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true, onlySnap);
+        },
+        () => {
+          insertExercise(connection, exercise, () => {
+            exercise.w_is_creation = 0;
+            updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true, onlySnap);
+          });
+        }
+      );
+    } else {
+      updateExercise(connection, exercise, successfulUpdation, parseInt(c) === l - 1, checkPresence, true, onlySnap);
+    }
   }
 }
 
@@ -180,7 +193,9 @@ function updateWorkout(connection, workout, successfulUpdation) {
         connection,
         workout,
         _result => {
-          updateExercises(connection, workout, successfulUpdation, true);
+          updateTable(connectoin, queryWorkoutSnapUpdate, workout, () => {
+            updateExercises(connection, workout, successfulUpdation, true);
+          });
         },
         () => {
           insertIntoTable(connection, queryWorkoutSnapInsert, workout, () => {
@@ -192,8 +207,43 @@ function updateWorkout(connection, workout, successfulUpdation) {
   });
 }
 
+function workoutDone(connection, workout, successfulUpdation) {
+  if (!workout.w_date) {
+    workout.w_date = new Date().toISOString().split("T")[0];
+  }
+  workout.w_is_creation = 0;
+  updateTable(connection, queryWorkoutDone, workout, () => {
+    checkWorkoutSnapPresence(
+      connection,
+      workout,
+      () => {
+        checkDoneDatePresence(
+          connection,
+          workout,
+          () => {
+            updateExercises(connection, workout, successfulUpdation, true, true, false);
+          },
+          () => {
+            insertIntoTable(connection, queryDoneDateInsert, workout, () => {
+              updateExercises(connection, workout, successfulUpdation, true, true, false);
+            });
+          }
+        );
+      },
+      () => {
+        insertIntoTable(connection, queryWorkoutSnapInsert, workout, () => {
+          insertIntoTable(connection, queryDoneDateInsert, workout, () => {
+            updateExercises(connection, workout, successfulUpdation, false, true, false);
+          });
+        });
+      }
+    );
+  });
+}
+
 module.exports = {
   updateGoal,
   updateExercise,
-  updateWorkout
+  updateWorkout,
+  workoutDone
 };

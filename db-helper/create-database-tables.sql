@@ -20,7 +20,8 @@ create table user_data (
   -- Height will be stored as cm
   u_height dec(7,3) not null,
   primary key (u_id),
-  foreign key (u_uname) references user_credential(u_uname)
+  foreign key (u_uname) 
+  references user_credential(u_uname)
     on delete cascade
     on update cascade
 );
@@ -31,7 +32,8 @@ create table user_weight (
   u_date_created datetime not null, 
   -- Weight will be stored as kg
   u_weight dec(6,3) not null, 
-  foreign key (u_id) references user_data(u_id)
+  foreign key (u_id) 
+  references user_data(u_id)
     on delete cascade
     on update cascade
 );
@@ -46,7 +48,8 @@ create table goal (
   g_complete tinyint unsigned default 0,
   g_date_completed date,
   primary key (g_id),
-  foreign key (u_id) references user_data(u_id)
+  foreign key (u_id) 
+  references user_data(u_id)
     on delete cascade
     on update cascade
 );
@@ -57,9 +60,10 @@ create table workout (
   u_id varchar(40),
   w_name varchar(200) not null,
   w_days varchar(20) not null, 
-  w_last date,
+  w_date date,
   primary key (w_id),
-  foreign key (u_id) references user_data(u_id)
+  foreign key (u_id) 
+  references user_data(u_id)
     on delete cascade
     on update cascade
 );
@@ -71,9 +75,22 @@ create table workout_snap (
   w_note varchar(2000),
   w_is_creation tinyint unsigned default 0,
   primary key(w_id, w_date, w_is_creation),
-  foreign key (w_id) references workout(w_id)
+  foreign key (w_id) 
+  references workout(w_id)
     on delete cascade
     on update cascade
+);
+
+-- Table to keep track of all the done dates 
+-- ie when a workout is completed.
+create table done_date (
+  w_id varchar(40),
+  w_date date, 
+  w_is_creation tinyint unsigned default 0,
+  primary key (w_id, w_date),
+  foreign key (w_id, w_date, w_is_creation) 
+  references workout_snap(w_id, w_date, w_is_creation)
+    on delete cascade
 );
 
 -- Table that stores an exercise's details
@@ -98,10 +115,12 @@ create table exercise_snap (
   e_unit enum('kg','lb','kmpg','mph') not null default 'kg',
   w_is_creation tinyint unsigned default 0,
   primary key (e_id, w_date, w_is_creation),
-  foreign key (e_id) references exercise(e_id)
+  foreign key (e_id) 
+  references exercise(e_id)
     on delete cascade
     on update cascade,
-  foreign key (w_id,w_date,w_is_creation) references workout_snap(w_id,w_date,w_is_creation)
+  foreign key (w_id,w_date,w_is_creation) 
+  references workout_snap(w_id,w_date,w_is_creation)
     on delete cascade
     on update cascade
 );
@@ -118,10 +137,12 @@ create table cycle_snap (
   c_rest smallint unsigned not null default 0,
   w_is_creation tinyint unsigned default 0,
   primary key(c_id, w_date, w_is_creation),
-  foreign key (e_id) references exercise(e_id)
+  foreign key (e_id) 
+  references exercise(e_id)
     on delete cascade
     on update cascade,
-  foreign key (w_id,w_date,w_is_creation) references workout_snap(w_id,w_date,w_is_creation)
+  foreign key (w_id,w_date,w_is_creation) 
+  references workout_snap(w_id,w_date,w_is_creation)
     on delete cascade
     on update cascade
 );

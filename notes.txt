@@ -176,3 +176,62 @@ workout updated cases:
       e_id: ""
     ]
   }
+
+  DONE
+  workout: {
+    w_id: "",
+    w_name: "",
+    w_days: "",
+    w_note: "",
+    w_exercises: [
+      {
+        e_id: "",
+        e_name: "",
+        e_unit: "",
+        e_note: "",
+        e_cycles: [
+          {
+            c_id: "",
+            c_intensity: 0.0,
+            c_reps: 0,
+            c_rest: 0
+          }
+        ]
+      },
+      {
+      },
+      { 
+      }
+    ],
+    w_exercises_deleted: [
+      e_id: ""
+    ]
+  }
+
+  entire workout object is sent and then updated and snaps for all the 
+  exercises and cycles in the workout object are created for that day, 
+  the workout object should contain all the exercises of the workout
+  relevant info in the workout object for done:
+
+  - w_id
+  - w_date w_last will be set to this date
+  - w_is_creation = 0
+  - w_note
+  - e_id
+  - e_note
+  - e_unit
+  - c_id
+  - c_seq
+  - c_intensity
+  - c_reps
+  - c_rest
+
+should set w_last for the workout 
+checks if workout_snap is present 
+if no then creates all the snaps
+else updates workout_snap, 
+  checks if exercise_snap and cycle_snap are present
+  if no then creates else updates them
+
+check only done date presence if it is not present then
+create a workout_snap, then a done date then the other snaps.

@@ -1,4 +1,4 @@
-const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap, getExercise } = require("./queries/query-other");
+const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap, getExercise, getDoneDate } = require("./queries/query-other");
 
 function defaultNoResultHandler(from) {
   return () => {
@@ -66,6 +66,12 @@ function checkCycleSnapPresence(connection, { c_id, w_date, w_is_creation }, pre
   connection.query(getCycleSnap(c_id, w_date, w_is_creation), queryCallbackSelect(presentCallback, notPresentCallback, defaultNoResultHandler(undefMessage)));
 }
 
+// Checks if the done has been clicked for an exercise for the day.
+function checkDoneDatePresence(connection, { w_id, w_date }, presentCallback, notPresentCallback) {
+  const undefMessage = "check done date presence: undefined";
+  connection.query(getDoneDate(w_id, w_date), queryCallbackSelect(presentCallback, notPresentCallback, defaultNoResultHandler(undefMessage)));
+}
+
 // General function to insert values into a table specified by the queryGetter.
 function insertIntoTable(connection, queryGetter, dataToInsert, resultHandler) {
   const noResultMessage = `no result\ninsertion: ${JSON.stringify(dataToInsert)}`;
@@ -84,13 +90,19 @@ function updateTable(connection, queryGetter, updationData, resultHandler) {
   connection.query(queryGetter(updationData), queryCallbackNonSelect(resultHandler, defaultNoResultHandler(noResultMessage)));
 }
 
+function noQuote(str) {
+  return str.replace("'", "`");
+}
+
 module.exports = {
+  noQuote,
   insertIntoTable,
   checkUserPresence,
   checkWorkoutSnapPresence,
   checkExerciseSnapPresence,
   checkExercisePresence,
   checkCycleSnapPresence,
+  checkDoneDatePresence,
   deleteFromTable,
   updateTable
 };
