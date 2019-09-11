@@ -235,3 +235,68 @@ else updates workout_snap,
 
 check only done date presence if it is not present then
 create a workout_snap, then a done date then the other snaps.
+
+GETTING THE DATA
+The login response object
+user: {
+  id: "",
+  fname: "",
+  lname: "",
+  lastWeighed: "",
+  weight: 0.0, // last entered
+  height: 0.0,
+  goals: [
+    {
+      id: "",
+      title: "",
+      details: "",
+      deadline: "yyyy-mm-dd",
+      complete: 0,
+      dateCompleted: "yyyy-mm-dd"
+    },
+    {
+      
+    }
+  ]
+  workouts: [
+    {
+      id: "",
+      name: "",
+      days: [],
+      note: "",
+      last: "yyyy-mm-dd"
+      exercises: [
+        {
+          id: "",
+          name: "",
+          note: "",
+          unit: "",
+          sets: [
+            {
+              id: "",
+              intensity: 0.0,
+              reps: 0,
+              rest: 0,
+              
+            },
+            {
+              // additional cycles
+            }
+          ]
+        },
+        {
+          // additional exercises
+        }
+      ]
+    },
+    {      
+      // additional workouts
+    }
+  ]
+}
+
+on login check if user is present:
+user: {
+  u_uname: "",
+  u_passw: ""
+}

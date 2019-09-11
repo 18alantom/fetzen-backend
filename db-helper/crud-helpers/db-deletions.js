@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { deleteFromTable, checkUserPresence } = require("./helper-functions");
-const { queryUserDelete, queryGoalDelete, queryWorkoutDelete, queryExerciseDelete } = require("./queries/query-delete");
+const { queryUserDelete, queryGoalDelete, queryWorkoutDelete, queryExerciseDelete } = require("../queries/query-delete");
 
 function deleteUser(connection, user, successfulDeletion, invalidPassword) {
   checkUserPresence(

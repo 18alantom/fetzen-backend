@@ -1,4 +1,4 @@
-const { noQuote: nq } = require("../helper-functions");
+const { noQuote: nq } = require("../crud-helpers/helper-functions");
 
 const queryUserCredentialInsert = ({ u_uname, u_passw }) => {
   return `

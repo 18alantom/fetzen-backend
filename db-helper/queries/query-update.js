@@ -1,4 +1,4 @@
-const { noQuote: nq } = require("../helper-functions");
+const { noQuote: nq } = require("../crud-helpers/helper-functions");
 
 const queryGoalUpdate = ({ g_id, g_complete, g_date_completed }) => {
   return `

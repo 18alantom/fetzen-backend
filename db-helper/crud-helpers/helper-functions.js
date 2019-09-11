@@ -1,4 +1,4 @@
-const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap, getExercise, getDoneDate } = require("./queries/query-other");
+const { getUser, getWorkoutSnap, getExerciseSnap, getCycleSnap, getExercise, getDoneDate } = require("../queries/query-other");
 
 function defaultNoResultHandler(from) {
   return () => {
@@ -8,11 +8,11 @@ function defaultNoResultHandler(from) {
 
 // Returns a function that is to be used for the query callback
 function queryCallbackNonSelect(resultHandler, noResultHandler) {
-  return (_err, _result, _fields) => {
-    if (_err) {
-      console.error(_err);
-    } else if (_result) {
-      resultHandler(_result);
+  return (err, result, _fields) => {
+    if (err) {
+      console.error(err);
+    } else if (result) {
+      resultHandler(result);
     } else {
       noResultHandler();
     }
@@ -21,12 +21,12 @@ function queryCallbackNonSelect(resultHandler, noResultHandler) {
 
 // Returns a function that is to be used for the select query callback where an array is expected as the result
 function queryCallbackSelect(resultHandler, zeroResultHandler, undefResultHandler) {
-  return (_err, _result, _fields) => {
-    if (_err) {
-      console.error(_err);
-    } else if (_result.length >= 1) {
-      resultHandler(_result);
-    } else if (_result.length === 0) {
+  return (err, result, _fields) => {
+    if (err) {
+      console.error(err);
+    } else if (result.length >= 1) {
+      resultHandler(result);
+    } else if (result.length === 0) {
       zeroResultHandler();
     } else {
       undefResultHandler();
@@ -90,6 +90,12 @@ function updateTable(connection, queryGetter, updationData, resultHandler) {
   connection.query(queryGetter(updationData), queryCallbackNonSelect(resultHandler, defaultNoResultHandler(noResultMessage)));
 }
 
+// General function to get data from a table
+function getFromTable(connection, queryGetter, queryData, resultHandler, zeroResultHandler) {
+  const noResultMessage = `no result\nget: ${JSON.stringify(queryData)}`;
+  connection.query(queryGetter(queryData), queryCallbackSelect(resultHandler, zeroResultHandler, defaultNoResultHandler(noResultMessage)));
+}
+
 function noQuote(str) {
   return str.replace("'", "`");
 }
@@ -104,5 +110,6 @@ module.exports = {
   checkCycleSnapPresence,
   checkDoneDatePresence,
   deleteFromTable,
-  updateTable
+  updateTable,
+  getFromTable
 };

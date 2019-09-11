@@ -9,7 +9,7 @@ const {
   queryExerciseInsert,
   queryExerciseSnapInsert,
   queryCycleSnapInsert
-} = require("./queries/query-insert");
+} = require("../queries/query-insert");
 const { insertIntoTable, checkUserPresence, checkWorkoutSnapPresence } = require("./helper-functions");
 
 // Inserts user credentials into the database to be called by register

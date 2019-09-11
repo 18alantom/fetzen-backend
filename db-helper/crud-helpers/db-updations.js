@@ -14,9 +14,9 @@ const {
   queryCycleSnapUpdate,
   queryWorkoutUpdate,
   queryWorkoutSnapUpdate
-} = require("./queries/query-update");
-const { queryDoneDateInsert, queryWorkoutSnapInsert, queryExerciseSnapInsert, queryCycleSnapInsert } = require("./queries/query-insert");
-const { queryWorkoutDone } = require("./queries/query-done");
+} = require("../queries/query-update");
+const { queryDoneDateInsert, queryWorkoutSnapInsert, queryExerciseSnapInsert, queryCycleSnapInsert } = require("../queries/query-insert");
+const { queryWorkoutDone } = require("../queries/query-done");
 const { insertExercise } = require("./db-insertions");
 const { deleteExercise } = require("./db-deletions");
 
