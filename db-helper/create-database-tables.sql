@@ -56,6 +56,7 @@ create table goal (
 
 -- Table to store the user's workouts
 create table workout (
+  w_seq tinyint unsigned default 0,
   w_id varchar(40),
   u_id varchar(40),
   w_name varchar(200) not null,
@@ -95,6 +96,7 @@ create table done_date (
 
 -- Table that stores an exercise's details
 create table exercise (
+  e_seq tinyint unsigned default 0,
   e_id varchar(40),
   w_id varchar(40),
   e_name varchar(200) not null,

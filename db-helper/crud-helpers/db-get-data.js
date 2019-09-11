@@ -1,6 +1,6 @@
 const { getFromTable } = require("./helper-functions");
-const { getGoalArray } = require("./response-creation-helpers");
-const { queryGetUserData, queryGetUserWeightLatest, queryGetGoal } = require("../queries/query-get-data");
+const { getGoalArray, getWorkoutArray } = require("./response-creation-helpers");
+const { queryGetUserData, queryGetUserWeightLatest, queryGetGoal, queryGetWorkout } = require("../queries/query-get-data");
 
 function getUserData(connection, user, onGetUserData, zeroResultHandler) {
   getFromTable(connection, queryGetUserData, user, onGetUserData, zeroResultHandler);
@@ -14,7 +14,9 @@ function getGoals(connection, user, onGetGoals, zeroResultHandler) {
   getFromTable(connection, queryGetGoal, user, onGetGoals, zeroResultHandler);
 }
 
-function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {}
+function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
+  getFromTable(connection, queryGetWorkout, user, onGetWorkout, zeroResultHandler);
+}
 
 function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
   const user = {};
@@ -35,11 +37,18 @@ function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
             searchObj,
             goals => {
               user.goals = getGoalArray(goals);
-              console.log(user);
-              onGetUser();
-              // TODO: Get the users workouts 
-              // Convert days to an array, 
-              // Add a workouts object and add to that.
+              getWorkout(
+                connection,
+                searchObj,
+                workouts => {
+                  user.workouts = getWorkoutArray(workouts);
+                  onGetUser(user);
+                },
+                () => {
+                  // TODO: No workout found
+                  console.log("no workouts found");
+                }
+              );
             },
             () => {
               // TODO: No goal found

@@ -28,17 +28,17 @@ const queryGoalInsert = ({ g_id, u_id, g_title, g_detail, g_deadline }) => {
   `;
 };
 
-const queryWorkoutInsert = ({ w_id, u_id, w_name, w_days }) => {
+const queryWorkoutInsert = ({ w_seq, w_id, u_id, w_name, w_days }) => {
   return `
-    insert into workout (w_id, u_id, w_name, w_days)
-    values ('${w_id}', '${u_id}', '${nq(w_name)}', '${w_days}')
+    insert into workout (w_seq, w_id, u_id, w_name, w_days)
+    values (${w_seq}, '${w_id}', '${u_id}', '${nq(w_name)}', '${w_days}')
   `;
 };
 
-const queryExerciseInsert = ({ e_id, w_id, e_name }) => {
+const queryExerciseInsert = ({ e_seq, e_id, w_id, e_name }) => {
   return `
     insert into exercise
-    values ('${e_id}', '${w_id}', '${nq(e_name)}')
+    values (${e_seq}, '${e_id}', '${w_id}', '${nq(e_name)}')
   `;
 };
 

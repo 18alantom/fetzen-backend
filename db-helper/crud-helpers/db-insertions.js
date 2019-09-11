@@ -115,6 +115,9 @@ function insertWorkout(connection, workout, successfulInsertion) {
       let numberOfExercises = workout.w_exercises.length;
       for (let i in workout.w_exercises) {
         const exercise = workout.w_exercises[i];
+        if (exercise.e_seq === undefined) {
+          exercise.e_seq = parseInt(i);
+        }
         exercise.w_id = workout.w_id;
         exercise.w_date = workout.w_date;
         exercise.w_is_creation = workout.w_is_creation;

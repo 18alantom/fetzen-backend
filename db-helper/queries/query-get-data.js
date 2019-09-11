@@ -26,11 +26,17 @@ const queryGetGoal = ({ u_id }) => {
 };
 
 const queryGetWorkout = ({ u_id }) => {
-  
+  return `
+    select w_id as "id", w_name as "name", w_days as "days",
+    w_date as "last" from workout
+    where u_id="${u_id}"
+    order by w_days
+  `;
 };
 
 module.exports = {
   queryGetUserData,
   queryGetUserWeightLatest,
-  queryGetGoal
+  queryGetGoal,
+  queryGetWorkout
 };

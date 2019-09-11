@@ -8,10 +8,14 @@ const queryGoalUpdate = ({ g_id, g_complete, g_date_completed }) => {
   `;
 };
 
-const queryExerciseUpdate = ({ e_id, e_name }) => {
+const queryExerciseUpdate = ({ e_seq, e_id, e_name }) => {
+  let setESeq = "";
+  if (e_seq != undefined) {
+    setESeq = `, e_seq=${e_seq}`;
+  }
   return `
     update exercise
-    set e_name='${nq(e_name)}' 
+    set e_name='${nq(e_name)}' ${setESeq}
     where e_id='${e_id}'
   `;
 };
@@ -50,10 +54,14 @@ const queryCycleSnapUpdate = ({ c_id, c_seq, w_date, c_intensity, c_reps, c_rest
   `;
 };
 
-const queryWorkoutUpdate = ({ w_id, w_name, w_days }) => {
+const queryWorkoutUpdate = ({ w_seq, w_id, w_name, w_days }) => {
+  let setWSeq = "";
+  if (w_seq != undefined) {
+    setWSeq = `, w_seq=${w_seq}`;
+  }
   return `
     update workout
-    set w_name='${nq(w_name)}', w_days='${w_days}'
+    set w_name='${nq(w_name)}', w_days='${w_days}'${setWSeq}
     where w_id='${w_id}'
   `;
 };
