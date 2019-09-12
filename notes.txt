@@ -1,7 +1,7 @@
 CREATION JSON
   user: {
     u_uname: "",
-    u_upassw: "",
+    u_passw: "",
     u_id: "",
     u_first_name: "",
     u_last_name: "",
@@ -11,9 +11,9 @@ CREATION JSON
   }
 
   weight: {
-    u_id: "",
-    u_date_created: 'yyyy-mm-ddThh:mm:ss',
-    u_weight: 0.0
+    "u_id" : "",
+    "u_date_created" : 'yyyy-mm-ddThh:mm:ss',
+    "u_weight" : 0.0
   }
 
   goal: {

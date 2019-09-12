@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { deleteFromTable, checkUserPresence } = require("./helper-functions");
 const { queryUserDelete, queryGoalDelete, queryWorkoutDelete, queryExerciseDelete } = require("../queries/query-delete");
 
-function deleteUser(connection, user, successfulDeletion, invalidPassword) {
+function deleteUser(connection, user, successfulDeletion, invalidPassword, invalidUsername) {
   checkUserPresence(
     connection,
     user.u_uname,
@@ -18,10 +18,7 @@ function deleteUser(connection, user, successfulDeletion, invalidPassword) {
         }
       });
     },
-    () => {
-      console.log(`user ${user.u_uname} is not present`);
-
-    }
+    invalidUsername
   );
 }
 

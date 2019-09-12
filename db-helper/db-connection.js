@@ -2,8 +2,6 @@ const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const { checkUserPresence } = require("./crud-helpers/helper-functions");
 
-const saltRounds = 4;
-
 // Creates a connection with the database
 function getConnection(params) {
   return mysql.createConnection(params);

@@ -8,7 +8,7 @@ const usersRouter = require("./routes/users");
 const goalsRouter = require("./routes/goals");
 const workoutsRouter = require("./routes/workouts");
 const exercisesRouter = require("./routes/exercises");
-const cyclesRouter = require("./routes/cycles");
+// const cyclesRouter = require("./routes/cycles");
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/workouts", workoutsRouter);
 app.use("/exercises", exercisesRouter);
-app.use("/cycles", cyclesRouter);
+// app.use("/cycles", cyclesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -43,4 +43,4 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
-module.exports = app;
+module.exports = { app };
