@@ -52,9 +52,30 @@ const addCyclesToWorkoutObject = (workouts, cycleRes) => {
   }
 };
 
+const datesResponseToArray = datesRes => {
+  const dates = [];
+  for (let d in datesRes) {
+    dates.push(datesRes[d].date);
+  }
+  return dates;
+};
+
+const weightsResponseToArray = weightsRes => {
+  const weights = [];
+  for (let d in weightsRes) {
+    const { datetime, weight } = weightsRes[d];
+    weights.push({ datetime, weight });
+  }
+  return weights;
+};
+
+
+
 module.exports = {
   getGoalArray,
   getWorkoutArray,
   addExerciseToWorkoutObject,
-  addCyclesToWorkoutObject
+  addCyclesToWorkoutObject,
+  datesResponseToArray,
+  weightsResponseToArray
 };

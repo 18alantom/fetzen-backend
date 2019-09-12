@@ -1,5 +1,12 @@
 const { getFromTable } = require("./helper-functions");
-const { getGoalArray, getWorkoutArray, addExerciseToWorkoutObject, addCyclesToWorkoutObject } = require("./response-creation-helpers");
+const {
+  getGoalArray,
+  getWorkoutArray,
+  addExerciseToWorkoutObject,
+  addCyclesToWorkoutObject,
+  datesResponseToArray,
+  weightsResponseToArray
+} = require("./response-creation-helpers");
 const {
   queryGetUserData,
   queryGetGoal,
@@ -7,7 +14,10 @@ const {
   queryGetWorkout,
   queryGetExercise,
   queryGetExerciseIds,
-  queryGetCycle
+  queryGetCycle,
+  queryGetExerciseStats,
+  queryGetUserWeights,
+  queryGetWorkoutDates
 } = require("../queries/query-get-data");
 
 function getUserData(connection, user, onGetUserData, zeroResultHandler) {
@@ -125,4 +135,38 @@ function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
   });
 }
 
-module.exports = { getUser };
+// List of all done dates
+function getWorkoutDates(connection, { w_id }, onGetWorkoutDates, zeroResultHandler) {
+  getFromTable(
+    connection,
+    queryGetWorkoutDates,
+    w_id,
+    dates => {
+      onGetWorkoutDates(datesResponseToArray(dates));
+    },
+    () => {
+      zeroResultHandler();
+    }
+  );
+}
+
+// List of all user weights
+function getUserWeights(connection, { u_id }, onGetWorkoutDates, zeroResultHandler) {
+  getFromTable(
+    connection,
+    queryGetUserWeights,
+    u_id,
+    dates => {
+      onGetWorkoutDates(weightsResponseToArray(dates));
+    },
+    () => {
+      zeroResultHandler();
+    }
+  );
+}
+
+// List of all done dates
+function getExerciseStats(connection, { e_id }, onGetWorkoutStats, zeroResultHandler) {
+  
+}
+module.exports = { getUser, getExerciseStats, getWorkoutDates, getUserWeights };

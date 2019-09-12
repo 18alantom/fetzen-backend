@@ -95,6 +95,24 @@ const queryGetCycle = eList => {
   return queries.join("\nunion\n");
 };
 
+const queryGetWorkoutDates = w_id => {
+  return `
+    select w_date as "date" 
+    from done_date
+    where w_id="${w_id}"
+    order by w_date desc
+  `;
+};
+const queryGetUserWeights = u_id => {
+  return `
+    select u_date_created as "datetime", u_weight as "weight"
+    from user_weight
+    where u_id="${u_id}"
+    order by u_date_created desc
+  `;
+};
+const queryGetExerciseStats = e_id => {};
+
 module.exports = {
   queryGetUserData,
   queryGetGoal,
@@ -102,5 +120,8 @@ module.exports = {
   queryGetWorkout,
   queryGetExerciseIds,
   queryGetExercise,
-  queryGetCycle
+  queryGetCycle,
+  queryGetWorkoutDates,
+  queryGetUserWeights,
+  queryGetExerciseStats
 };
