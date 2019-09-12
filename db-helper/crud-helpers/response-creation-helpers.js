@@ -19,7 +19,24 @@ const getWorkoutArray = workoutsResponse => {
   return workouts;
 };
 
+const addExerciseToWorkoutObject = (workouts, exerciseRes) => {
+  const tempWorkoutObj = {};
+  for (let e in exerciseRes) {
+    const wid = exerciseRes[e].w_id;
+    const exercise = {};
+    Object.assign(exercise, exerciseRes[e]);
+    if (tempWorkoutObj[wid] === undefined) {
+      tempWorkoutObj[wid] = [];
+    }
+    tempWorkoutObj[wid].push(exercise);
+  }
+  for (let w in workouts) {
+    workouts[w].exercises = tempWorkoutObj[workouts[w].id];
+  }
+};
+
 module.exports = {
   getGoalArray,
-  getWorkoutArray
+  getWorkoutArray,
+  addExerciseToWorkoutObject
 };

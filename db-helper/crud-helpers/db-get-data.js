@@ -1,13 +1,9 @@
 const { getFromTable } = require("./helper-functions");
-const { getGoalArray, getWorkoutArray } = require("./response-creation-helpers");
-const { queryGetUserData, queryGetUserWeightLatest, queryGetGoal, queryGetWorkout } = require("../queries/query-get-data");
+const { getGoalArray, getWorkoutArray, addExerciseToWorkoutObject } = require("./response-creation-helpers");
+const { queryGetUserData, queryGetGoal, queryGetWorkoutId, queryGetWorkout, queryGetExercise, queryGetExerciseIds } = require("../queries/query-get-data");
 
 function getUserData(connection, user, onGetUserData, zeroResultHandler) {
   getFromTable(connection, queryGetUserData, user, onGetUserData, zeroResultHandler);
-}
-
-function getUserWeight(connection, user, onGetUserWeight, zeroResultHandler) {
-  getFromTable(connection, queryGetUserWeightLatest, user, onGetUserWeight, zeroResultHandler);
 }
 
 function getGoals(connection, user, onGetGoals, zeroResultHandler) {
@@ -15,55 +11,93 @@ function getGoals(connection, user, onGetGoals, zeroResultHandler) {
 }
 
 function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
-  getFromTable(connection, queryGetWorkout, user, onGetWorkout, zeroResultHandler);
+  getFromTable(
+    connection,
+    queryGetWorkoutId,
+    user,
+    w_ids => {
+      getFromTable(
+        connection,
+        queryGetWorkout,
+        w_ids,
+        workoutRes => {
+          const workouts = getWorkoutArray(workoutRes);
+          getFromTable(
+            connection,
+            queryGetExerciseIds,
+            w_ids,
+            e_ids => {
+              getFromTable(
+                connection,
+                queryGetExercise,
+                e_ids,
+                exerciseRes => {
+                  addExerciseToWorkoutObject(workouts, exerciseRes);
+                  console.log(workouts);
+                  getFromTable(
+                    connection,
+                    queryGetCycle,
+                    cycleRes,
+                    () => {},
+                    () => {
+                      // TODO: Handle no cycles returned.
+                    }
+                  );
+                },
+                () => {
+                  // TODO: Handle no exercises returned.
+                }
+              );
+            },
+            () => {
+              // TODO: Handle no exercise ids returned.
+            }
+          );
+        },
+        () => {
+          // TODO: Handle no workouts returned.
+        }
+      );
+    },
+    () => {
+      // TODO: Handle no workout ids returned.
+    }
+  );
+}
+
+function getExercise(connection, workout, onGetExercise, zeroResultHandler) {
+  getFromTable(connection, queryGetExercise, workout, onGetExercise, zeroResultHandler);
 }
 
 function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
   const user = {};
   const searchObj = {};
-  getUserData(
-    connection,
-    userCredentials,
-    userData => {
-      Object.assign(user, userData[0]);
-      searchObj.u_id = user.id;
-      getUserWeight(
-        connection,
-        searchObj,
-        userWeight => {
-          Object.assign(user, userWeight[0]);
-          getGoals(
-            connection,
-            searchObj,
-            goals => {
-              user.goals = getGoalArray(goals);
-              getWorkout(
-                connection,
-                searchObj,
-                workouts => {
-                  user.workouts = getWorkoutArray(workouts);
-                  onGetUser(user);
-                },
-                () => {
-                  // TODO: No workout found
-                  console.log("no workouts found");
-                }
-              );
-            },
-            () => {
-              // TODO: No goal found
-              console.log("no goals found");
-            }
-          );
-        },
-        () => {
-          // TODO: No weight found
-          console.log("no weights found");
-        }
-      );
-    },
-    zeroResultHandler
-  );
+  getUserData(connection, userCredentials, userData => {
+    Object.assign(user, userData[0]);
+    searchObj.u_id = user.id;
+    getGoals(
+      connection,
+      searchObj,
+      goals => {
+        user.goals = getGoalArray(goals);
+        getWorkout(
+          connection,
+          searchObj,
+          workouts => {
+            // TODO: Handle response
+          },
+          () => {
+            // TODO: No Workouts
+          }
+        );
+      },
+      () => {
+        // TODO: No goal found
+        console.log("no goals found");
+      }
+    );
+    zeroResultHandler;
+  });
 }
 
 module.exports = { getUser };
