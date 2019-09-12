@@ -249,7 +249,7 @@ user: {
     {
       id: "",
       title: "",
-      details: "",
+      detail: "",
       deadline: "yyyy-mm-dd",
       complete: 0,
       dateCompleted: "yyyy-mm-dd"
@@ -300,3 +300,18 @@ user: {
   u_uname: "",
   u_passw: ""
 }
+
+Stats:
+workout:
+  - needs w_id
+  - list of all the done dates
+
+exercise:
+  - needs e_id
+  - all time average, calculates average from all the done sets of an exercise
+  - max average, calculates average from the max of all sets of an exercise
+  - list of exercise max values
+
+userweight:
+  - needs u_id
+  - list of all weights with dates

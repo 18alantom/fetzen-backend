@@ -103,6 +103,7 @@ const queryGetWorkoutDates = w_id => {
     order by w_date desc
   `;
 };
+
 const queryGetUserWeights = u_id => {
   return `
     select u_date_created as "datetime", u_weight as "weight"
@@ -111,7 +112,21 @@ const queryGetUserWeights = u_id => {
     order by u_date_created desc
   `;
 };
-const queryGetExerciseStats = e_id => {};
+
+const queryGetExerciseStats = e_id => {
+  return `
+    select c_intensity as "intensity", c_rest as "rest", 
+    c_reps as "reps", cycle_snap.w_date as "date"
+    from exercise join done_date join cycle_snap
+    where exercise.e_id="${e_id}"
+    and exercise.w_id = done_date.w_id
+    and exercise.e_id = cycle_snap.e_id
+    and done_date.w_date = cycle_snap.w_date
+    and cycle_snap.w_is_creation=0
+    order by cycle_snap.w_date desc, cycle_snap.c_intensity desc, 
+    cycle_snap.c_seq desc
+  `;
+};
 
 module.exports = {
   queryGetUserData,

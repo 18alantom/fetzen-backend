@@ -5,7 +5,8 @@ const {
   addExerciseToWorkoutObject,
   addCyclesToWorkoutObject,
   datesResponseToArray,
-  weightsResponseToArray
+  weightsResponseToArray,
+  createExerciseStats
 } = require("./response-creation-helpers");
 const {
   queryGetUserData,
@@ -78,16 +79,12 @@ function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
             }
           );
         },
-        () => {
-          // Handle no workouts returned.
-          zeroResultHandler();
-        }
+        // Handle no workouts returned.
+        zeroResultHandler
       );
     },
-    () => {
-      // Handle no workout ids returned.
-      zeroResultHandler();
-    }
+    // Handle no workout ids returned.
+    zeroResultHandler
   );
 }
 
@@ -144,9 +141,7 @@ function getWorkoutDates(connection, { w_id }, onGetWorkoutDates, zeroResultHand
     dates => {
       onGetWorkoutDates(datesResponseToArray(dates));
     },
-    () => {
-      zeroResultHandler();
-    }
+    zeroResultHandler
   );
 }
 
@@ -159,14 +154,20 @@ function getUserWeights(connection, { u_id }, onGetWorkoutDates, zeroResultHandl
     dates => {
       onGetWorkoutDates(weightsResponseToArray(dates));
     },
-    () => {
-      zeroResultHandler();
-    }
+    zeroResultHandler
   );
 }
 
 // List of all done dates
-function getExerciseStats(connection, { e_id }, onGetWorkoutStats, zeroResultHandler) {
-  
+function getExerciseStats(connection, { e_id }, onGetExerciseStats, zeroResultHandler) {
+  getFromTable(
+    connection,
+    queryGetExerciseStats,
+    e_id,
+    cycles => {
+      onGetExerciseStats(createExerciseStats(cycles));
+    },
+    zeroResultHandler
+  );
 }
 module.exports = { getUser, getExerciseStats, getWorkoutDates, getUserWeights };

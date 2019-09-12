@@ -69,7 +69,41 @@ const weightsResponseToArray = weightsRes => {
   return weights;
 };
 
+const createExerciseStats = cycles => {
+  const stats = {};
+  const temp = [];
+  const dateIndex = {};
+  let avgAll = 0;
+  let avgMax = 0;
+  let index = 0;
+  for (let c in cycles) {
+    const { intensity, rest, reps, date } = cycles[c];
+    avgAll += intensity;
+    if (dateIndex[date] === undefined) {
+      dateIndex[date] = index++;
+      temp[dateIndex[date]] = {};
+      temp[dateIndex[date]].date = date;
+      temp[dateIndex[date]].intensity = intensity;
+      temp[dateIndex[date]].reps = reps;
+      temp[dateIndex[date]].rest = rest;
+      avgMax += intensity;
+    }
+    if (temp[dateIndex[date]].intensity < intensity) {
+      temp[dateIndex[date]].intensity = intensity;
+      temp[dateIndex[date]].reps = reps;
+      temp[dateIndex[date]].rest = rest;
+      avgMax += intensity;
+    }
+  }
 
+  avgAll /= cycles.length;
+  avgMax /= index;
+
+  stats.allTimeAverage = avgAll;
+  stats.averageMax = avgMax;
+  stats.maxValues = temp;
+  return stats;
+};
 
 module.exports = {
   getGoalArray,
@@ -77,5 +111,6 @@ module.exports = {
   addExerciseToWorkoutObject,
   addCyclesToWorkoutObject,
   datesResponseToArray,
-  weightsResponseToArray
+  weightsResponseToArray,
+  createExerciseStats
 };
