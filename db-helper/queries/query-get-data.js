@@ -63,12 +63,12 @@ const queryGetExercise = eIdList => {
   const queries = [];
   for (let i in eIdList) {
     const query = `
-      (select exercise.e_id as "id", exercise.w_id, e_name as "name", w_date,
-      e_note as "note", e_unit as "unit" 
+      (select exercise.e_id as "id",e_name as "name", e_note as "note", 
+      e_unit as "unit", exercise.w_id, w_date, w_is_creation
       from exercise join exercise_snap
       where exercise.e_id = "${eIdList[i].e_id}"
       and exercise.e_id = exercise_snap.e_id
-      order by w_date desc 
+      order by w_date desc, w_is_creation asc
       limit 1)
     `;
     queries.push(query);
@@ -76,7 +76,24 @@ const queryGetExercise = eIdList => {
   return queries.join("\nunion\n");
 };
 
-const queryGetCycle = eIdList => {};
+const queryGetCycle = eList => {
+  const queries = [];
+  for (let i in eList) {
+    const { id, w_date, w_is_creation } = eList[i];
+    query = `
+      (select c_id as "id", c_intensity as "intensity", 
+      c_reps as "reps", c_rest as "rest", exercise.e_id, cycle_snap.w_id
+      from exercise join cycle_snap 
+      where exercise.e_id = "${id}"
+      and exercise.e_id = cycle_snap.e_id
+      and cycle_snap.w_date = "${w_date}"
+      and cycle_snap.w_is_creation = ${w_is_creation}
+      order by c_seq asc)
+    `;
+    queries.push(query);
+  }
+  return queries.join("\nunion\n");
+};
 
 module.exports = {
   queryGetUserData,

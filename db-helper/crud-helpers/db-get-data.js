@@ -1,6 +1,14 @@
 const { getFromTable } = require("./helper-functions");
-const { getGoalArray, getWorkoutArray, addExerciseToWorkoutObject } = require("./response-creation-helpers");
-const { queryGetUserData, queryGetGoal, queryGetWorkoutId, queryGetWorkout, queryGetExercise, queryGetExerciseIds } = require("../queries/query-get-data");
+const { getGoalArray, getWorkoutArray, addExerciseToWorkoutObject, addCyclesToWorkoutObject } = require("./response-creation-helpers");
+const {
+  queryGetUserData,
+  queryGetGoal,
+  queryGetWorkoutId,
+  queryGetWorkout,
+  queryGetExercise,
+  queryGetExerciseIds,
+  queryGetCycle
+} = require("../queries/query-get-data");
 
 function getUserData(connection, user, onGetUserData, zeroResultHandler) {
   getFromTable(connection, queryGetUserData, user, onGetUserData, zeroResultHandler);
@@ -10,6 +18,7 @@ function getGoals(connection, user, onGetGoals, zeroResultHandler) {
   getFromTable(connection, queryGetGoal, user, onGetGoals, zeroResultHandler);
 }
 
+// Also gets the exercises and the cycles associated with a workout.
 function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
   getFromTable(
     connection,
@@ -33,40 +42,43 @@ function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
                 e_ids,
                 exerciseRes => {
                   addExerciseToWorkoutObject(workouts, exerciseRes);
-                  console.log(workouts);
                   getFromTable(
                     connection,
                     queryGetCycle,
-                    cycleRes,
-                    () => {},
+                    exerciseRes,
+                    cycleRes => {
+                      addCyclesToWorkoutObject(workouts, cycleRes);
+                      onGetWorkout(workouts);
+                    },
                     () => {
-                      // TODO: Handle no cycles returned.
+                      // Handle no cycles returned.
+                      onGetWorkout(workouts);
                     }
                   );
                 },
                 () => {
-                  // TODO: Handle no exercises returned.
+                  // Handle no exercises returned.
+                  onGetWorkout(workouts);
                 }
               );
             },
             () => {
-              // TODO: Handle no exercise ids returned.
+              // Handle no exercise ids returned.
+              onGetWorkout(workouts);
             }
           );
         },
         () => {
-          // TODO: Handle no workouts returned.
+          // Handle no workouts returned.
+          zeroResultHandler();
         }
       );
     },
     () => {
-      // TODO: Handle no workout ids returned.
+      // Handle no workout ids returned.
+      zeroResultHandler();
     }
   );
-}
-
-function getExercise(connection, workout, onGetExercise, zeroResultHandler) {
-  getFromTable(connection, queryGetExercise, workout, onGetExercise, zeroResultHandler);
 }
 
 function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
@@ -84,16 +96,29 @@ function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
           connection,
           searchObj,
           workouts => {
-            // TODO: Handle response
+            user.workouts = workouts;
+            onGetUser(user);
           },
           () => {
-            // TODO: No Workouts
+            // No workouts found
+            onGetUser(user);
           }
         );
       },
       () => {
-        // TODO: No goal found
-        console.log("no goals found");
+        // No goals found
+        getWorkout(
+          connection,
+          searchObj,
+          workouts => {
+            user.workouts = workouts;
+            onGetUser(user);
+          },
+          () => {
+            // No workouts found
+            onGetUser(user);
+          }
+        );
       }
     );
     zeroResultHandler;
