@@ -91,45 +91,53 @@ function getWorkout(connection, user, onGetWorkout, zeroResultHandler) {
 function getUser(connection, userCredentials, onGetUser, zeroResultHandler) {
   const user = {};
   const searchObj = {};
-  getUserData(connection, userCredentials, userData => {
-    Object.assign(user, userData[0]);
-    searchObj.u_id = user.id;
-    getGoals(
-      connection,
-      searchObj,
-      goals => {
-        user.goals = getGoalArray(goals);
-        getWorkout(
-          connection,
-          searchObj,
-          workouts => {
-            user.workouts = workouts;
-            onGetUser(user);
-          },
-          () => {
-            // No workouts found
-            onGetUser(user);
-          }
-        );
-      },
-      () => {
-        // No goals found
-        getWorkout(
-          connection,
-          searchObj,
-          workouts => {
-            user.workouts = workouts;
-            onGetUser(user);
-          },
-          () => {
-            // No workouts found
-            onGetUser(user);
-          }
-        );
-      }
-    );
-    zeroResultHandler;
-  });
+  getUserData(
+    connection,
+    userCredentials,
+    userData => {
+      Object.assign(user, userData[0]);
+      searchObj.u_id = user.id;
+      getGoals(
+        connection,
+        searchObj,
+        goals => {
+          user.goals = getGoalArray(goals);
+          getWorkout(
+            connection,
+            searchObj,
+            workouts => {
+              user.workouts = workouts;
+              onGetUser(user);
+            },
+            () => {
+              // No workouts found
+              user.workouts = [];
+              onGetUser(user);
+            }
+          );
+        },
+        () => {
+          // No goals found
+          user.goals = [];
+          getWorkout(
+            connection,
+            searchObj,
+            workouts => {
+              user.workouts = workouts;
+              onGetUser(user);
+            },
+            () => {
+              // No workouts found
+              user.workouts = [];
+              onGetUser(user);
+            }
+          );
+        }
+      );
+    },
+    // User data not found
+    zeroResultHandler
+  );
 }
 
 // List of all done dates

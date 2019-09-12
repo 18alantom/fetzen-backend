@@ -99,6 +99,7 @@ const createExerciseStats = cycles => {
   avgAll /= cycles.length;
   avgMax /= index;
 
+  stats.allTimeMax = Math.max(...temp.map(c => c.intensity));
   stats.allTimeAverage = avgAll;
   stats.averageMax = avgMax;
   stats.maxValues = temp;
