@@ -1,9 +1,13 @@
 const { noQuote: nq } = require("../crud-helpers/helper-functions");
 
 const queryGoalUpdate = ({ g_id, g_complete, g_date_completed }) => {
+  let dateCompleted = `g_date_completed='${g_date_completed}'`;
+  if (!g_date_completed) {
+    dateCompleted = `g_date_completed=NULL`;
+  }
   return `
     update goal
-    set g_complete=${g_complete}, g_date_completed='${g_date_completed}'
+    set g_complete=${g_complete}, ${dateCompleted}
     where g_id='${g_id}'
   `;
 };

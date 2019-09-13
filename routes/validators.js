@@ -42,7 +42,7 @@ const checkRegisterData = ({ body }) => {
   return true;
 };
 
-checkUserWeight = ({ body }) => {
+const checkUserWeight = ({ body }) => {
   const { u_id, u_date_created, u_weight } = body;
   if (typeof u_id !== "string" || u_id === "") {
     return false;
@@ -56,7 +56,7 @@ checkUserWeight = ({ body }) => {
   return true;
 };
 
-checkUserId = ({ body }) => {
+const checkUserId = ({ body }) => {
   const { u_id } = body;
   if (typeof u_id !== "string" || u_id === "") {
     return false;
@@ -64,4 +64,41 @@ checkUserId = ({ body }) => {
   return true;
 };
 
-module.exports = { checkUserCredendials, checkRegisterData, checkUserWeight, checkUserId };
+const checkGoalAdd = ({ body }) => {
+  const { g_id, u_id, g_title, g_detail, g_deadline } = body;
+  const strings = [g_id, u_id, g_title, g_detail];
+  const date = new Date(g_deadline);
+  for (let i in strings) {
+    if (typeof strings[i] !== "string" || strings[i] === "") {
+      return false;
+    }
+  }
+  if (date.toString() === "Invalid Date") {
+    return false;
+  }
+  return true;
+};
+
+const checkGoalUpdate = ({ body }) => {
+  const { g_id, g_complete, g_date_completed } = body;
+  if (typeof g_id !== "string" || g_id === "") {
+    return false;
+  }
+  if (typeof g_complete !== "number") {
+    return false;
+  }
+  if (g_complete === 1 && new Date(g_date_completed).toString() === "Invalid Date") {
+    return false;
+  }
+  return true;
+};
+
+const checkGoalDelete = ({ body }) => {
+  const { g_id } = body;
+  if (typeof g_id !== "string" || g_id === "") {
+    return false;
+  }
+  return true;
+};
+
+module.exports = { checkUserCredendials, checkRegisterData, checkUserWeight, checkUserId, checkGoalAdd, checkGoalDelete, checkGoalUpdate };
