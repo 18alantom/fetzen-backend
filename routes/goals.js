@@ -1,10 +1,10 @@
 const express = require("express");
 const connection = require("./connection");
-// const {} = require("./validators");
 const { insertGoal } = require("../db-helper/crud-helpers/db-insertions");
 const { updateGoal } = require("../db-helper/crud-helpers/db-updations");
 const { deleteGoal } = require("../db-helper/crud-helpers/db-deletions");
 const { checkGoalAdd, checkGoalDelete, checkGoalUpdate } = require("./validators");
+
 const router = express.Router();
 
 // Goals routes

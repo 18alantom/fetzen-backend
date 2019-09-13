@@ -180,7 +180,6 @@ workout updated cases:
   DONE
   workout: {
     w_id: "",
-    w_name: "",
     w_days: "",
     w_note: "",
     w_exercises: [
