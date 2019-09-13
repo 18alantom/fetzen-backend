@@ -193,7 +193,7 @@ function updateWorkout(connection, workout, successfulUpdation) {
         connection,
         workout,
         _result => {
-          updateTable(connectoin, queryWorkoutSnapUpdate, workout, () => {
+          updateTable(connection, queryWorkoutSnapUpdate, workout, () => {
             updateExercises(connection, workout, successfulUpdation, true);
           });
         },

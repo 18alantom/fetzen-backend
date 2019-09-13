@@ -40,7 +40,7 @@ const getExercise = e_id => {
 
 const getDoneDate = (w_id, w_date) => {
   return `
-    select e_id
+    select w_id
     from done_date
     where w_id='${w_id}' and w_date='${w_date}'
   `;
