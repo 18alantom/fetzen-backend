@@ -31,7 +31,7 @@ const queryExerciseSnapUpdate = ({ e_id, w_date, e_note, e_unit, w_is_creation }
   if (e_unit) {
     eunit_setter = `e_unit='${e_unit}'`;
   }
-  if (e_note) {
+  if (e_note || e_note === "") {
     enote_setter = `e_note='${nq(e_note)}'`;
   }
   let a = eunit_setter.length > 0;

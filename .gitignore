@@ -11,7 +11,7 @@ yarn-error.log*
 # Don't track these either
 db-testers/
 db-tester.js
-notes.txt
+./notes.txt
 todo.txt
 test.sql
 

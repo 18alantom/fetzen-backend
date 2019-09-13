@@ -125,6 +125,16 @@ const checkExerciseDone = ({ e_id, e_unit, e_note, e_cycles }) => {
   return cStrs(strings) && cStn(e_note);
 };
 
+const checkExerciseUpdate = ({ body: { w_id, e_id, e_seq, w_date, e_name, e_unit, e_cycles } }) => {
+  const strings = [w_id, e_id, e_name, e_unit];
+  for (let c in e_cycles) {
+    if (!checkCycleAdd(e_cycles[c])) {
+      return false;
+    }
+  }
+  return cStrs(strings) && cDte(w_date) && cNum(e_seq);
+};
+
 // WORKOUT VALIDATORS
 
 const checkWorkoutAdd = ({ body }) => {
@@ -182,5 +192,6 @@ module.exports = {
   checkWorkoutAdd,
   checkWorkoutUpdate,
   checkWorkoutDelete,
-  checkWorkoutDone
+  checkWorkoutDone,
+  checkExerciseUpdate
 };
