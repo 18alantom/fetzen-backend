@@ -4,6 +4,7 @@ const path = require("path");
 const logger = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+const debug = require("debug")("fetzen-backend:app");
 
 // Importing the routes
 const usersRouter = require("./routes/users");
@@ -24,6 +25,12 @@ app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/workouts", workoutsRouter);
 app.use("/exercises", exercisesRouter);
+
+app.get("/", (req, res) => {
+  debug(req.method);
+  debug(req.headers);
+  res.status(418).json("no coffee");
+});
 
 // catch 404 and forward to error handler
 app.use((_req, _res, next) => {
