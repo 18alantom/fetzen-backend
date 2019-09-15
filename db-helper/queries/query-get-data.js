@@ -64,7 +64,7 @@ const queryGetExercise = eIdList => {
   for (let i in eIdList) {
     const query = `
       (select exercise.e_id as "id",e_name as "name", e_note as "note", 
-      e_unit as "unit", exercise.w_id, w_date, w_is_creation
+      e_unit as "units", exercise.w_id, w_date, w_is_creation
       from exercise join exercise_snap
       where exercise.e_id = "${eIdList[i].e_id}"
       and exercise.e_id = exercise_snap.e_id

@@ -22,7 +22,6 @@ router.post("/login", (req, res) => {
           connection,
           req.body,
           user => {
-            console.log(user);
             res.status(200).json(user);
           },
           () => {
@@ -42,7 +41,7 @@ router.post("/login", (req, res) => {
   }
 });
 
-router.put("/register", (req, res) => {
+router.post("/register", (req, res) => {
   // Code that creates entry for new user.
   debug(req.body);
   if (checkRegisterData(req)) {
