@@ -32,7 +32,7 @@ const queryGetWorkout = wIdList => {
   const queries = [];
   for (let i in wIdList) {
     const query = `
-      (select workout.w_id as "id", w_name as "name", 
+      (select workout.w_id as "id", w_name as "name", w_seq as "seq",
       workout.w_date as "last", w_days as "days", w_note as "note" 
       from workout join workout_snap
       where workout.w_id = workout_snap.w_id and workout.w_id="${wIdList[i].w_id}"
@@ -63,7 +63,7 @@ const queryGetExercise = eIdList => {
   const queries = [];
   for (let i in eIdList) {
     const query = `
-      (select exercise.e_id as "id",e_name as "name", e_note as "note", 
+      (select exercise.e_id as "id",e_name as "name", e_note as "note", e_seq as "seq",
       e_unit as "units", exercise.w_id, w_date, w_is_creation
       from exercise join exercise_snap
       where exercise.e_id = "${eIdList[i].e_id}"

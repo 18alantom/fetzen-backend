@@ -79,7 +79,7 @@ const checkGoalAdd = ({ body }) => {
 
 const checkGoalUpdate = ({ body }) => {
   const { g_id, g_complete, g_date_completed } = body;
-  if (cStr(g_id)) {
+  if (!cStr(g_id)) {
     return false;
   }
   if (!cNum(g_complete)) {
@@ -92,6 +92,7 @@ const checkGoalUpdate = ({ body }) => {
 };
 
 const checkGoalDelete = ({ body }) => {
+  console.log(body);
   const { g_id } = body;
   return cStr(g_id);
 };
@@ -133,6 +134,11 @@ const checkExerciseUpdate = ({ body: { w_id, e_id, e_seq, w_date, e_name, e_unit
     }
   }
   return cStrs(strings) && cDte(w_date) && cNum(e_seq);
+};
+
+const checkExerciseId = ({ body }) => {
+  const { e_id } = body;
+  return cStr(e_id);
 };
 
 // WORKOUT VALIDATORS
@@ -179,7 +185,11 @@ const checkWorkoutDelete = ({ body }) => {
   return cStr(w_id);
 };
 
-// TODO: Check the workout routes.
+const checkWorkoutId = ({ body }) => {
+  const { w_id } = body;
+  return cStr(w_id);
+};
+
 
 module.exports = {
   checkUserCredendials,
@@ -193,5 +203,7 @@ module.exports = {
   checkWorkoutUpdate,
   checkWorkoutDelete,
   checkWorkoutDone,
-  checkExerciseUpdate
+  checkWorkoutId,
+  checkExerciseUpdate,
+  checkExerciseId
 };

@@ -4,14 +4,14 @@ const { insertGoal } = require("../db-helper/crud-helpers/db-insertions");
 const { updateGoal } = require("../db-helper/crud-helpers/db-updations");
 const { deleteGoal } = require("../db-helper/crud-helpers/db-deletions");
 const { checkGoalAdd, checkGoalDelete, checkGoalUpdate } = require("./validators");
-const debug = require("debug")("fetzen-backend:goals")
+const debug = require("debug")("fetzen-backend:goals");
 const router = express.Router();
 
 // Goals routes
 
 router.post("/add", (req, res) => {
   // Code that adds to the Goal table.
-  debug(req.body)
+  debug(req.body);
   if (checkGoalAdd(req)) {
     insertGoal(connection, req.body, () => {
       res.status(200).json("goal added");
@@ -23,7 +23,7 @@ router.post("/add", (req, res) => {
 
 router.put("/update", (req, res) => {
   // Code that updates the Goal table.
-  debug(req.body)
+  debug(req.body);
   if (checkGoalUpdate(req)) {
     updateGoal(connection, req.body, () => {
       res.status(200).json("goal updated");
@@ -35,7 +35,7 @@ router.put("/update", (req, res) => {
 
 router.delete("/delete", (req, res) => {
   // Code that deletes from the Goal table.
-  debug(req.body)
+  debug(req.body);
   if (checkGoalDelete(req)) {
     deleteGoal(connection, req.body, () => {
       res.status(200).json("goal deleted");

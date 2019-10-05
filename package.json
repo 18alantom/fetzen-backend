@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "DEBUG=fetzen-backend:* node ./bin/www",
+    "debug": "DEBUG=fetzen-backend:* nodemon ./bin/www",
     "debug_u": "DEBUG=fetzen-backend:users,fetzen-backend:server node ./bin/www",
     "debug_g": "DEBUG=fetzen-backend:goals,fetzen-backend:server node ./bin/www",
     "debug_w": "DEBUG=fetzen-backend:workouts,fetzen-backend:server node ./bin/www",

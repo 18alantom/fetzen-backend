@@ -14,13 +14,14 @@ const exercisesRouter = require("./routes/exercises");
 
 const app = express();
 
+app.use(helmet());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(helmet());
 app.use(cors());
 
+// app.options("/goals", cors());
 app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/workouts", workoutsRouter);
@@ -30,6 +31,10 @@ app.get("/", (req, res) => {
   debug(req.method);
   debug(req.headers);
   res.status(418).json("no coffee");
+});
+
+app.get("/ping", (req, res) => {
+  res.status(200).json("alive");
 });
 
 // catch 404 and forward to error handler
