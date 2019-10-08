@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-// app.options("/goals", cors());
 app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/workouts", workoutsRouter);
