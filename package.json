@@ -1,6 +1,7 @@
 {
   "name": "fetzen-backend",
   "version": "0.1.0",
+  "description": "API server using MySQL to the fetzen workout tracker",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -14,6 +15,7 @@
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "helmet": "^3.21.0",
     "http-errors": "~1.6.3",
@@ -23,5 +25,10 @@
   },
   "devDependencies": {
     "nodemon": "^1.19.2"
-  }
+  },
+  "engines": {
+    "node": "10.8.0"
+  },
+  "author": "18alantom",
+  "license": "GNU GPL v3.0"
 }
